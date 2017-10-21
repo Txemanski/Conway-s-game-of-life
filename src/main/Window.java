@@ -21,7 +21,7 @@ public class Window extends JFrame implements KeyListener{
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {if (arg0.getKeyCode() == KeyEvent.VK_SPACE)	p.updatePanel();}
+	public void keyPressed(KeyEvent arg0) {if (arg0.getKeyCode() == KeyEvent.VK_SPACE)	p.changeStatus();}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
