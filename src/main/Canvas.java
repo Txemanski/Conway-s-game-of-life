@@ -12,7 +12,8 @@ public class Canvas extends JPanel {
 	private static final long serialVersionUID = -4810618286807932601L;
 	public static final int RESOLUTION = 1000;
 	private static final int CELLSIZE = 5;
-	private Timer timer = new Timer(40, e -> updatePanel()) ;
+	public static final int INITIAL_DELAY = 1000;
+	private Timer timer = new Timer(INITIAL_DELAY, e -> updatePanel()) ;
 	private Grid grella = new Grid();
 	
 	public Canvas() {
@@ -43,6 +44,10 @@ public class Canvas extends JPanel {
 		if (timer.isRunning()) timer.stop();
 		else timer.start();
 		
+	}
+	
+	public void setDelay(int delay) {
+		timer.setDelay(delay);
 	}
 
 }
