@@ -11,11 +11,14 @@ public class Grid {
 	
 	
 	public Grid () {
-		aliveCells.add(new Point(2,1));
+		/*aliveCells.add(new Point(2,1));
 		aliveCells.add(new Point(3,2));
 		aliveCells.add(new Point(3,3));
 		aliveCells.add(new Point(2,3));
 		aliveCells.add(new Point(1,3));
+		*/
+		aliveCells.add(new Point(0,0));
+		
 	}
 	
 	public void updateGrid() {

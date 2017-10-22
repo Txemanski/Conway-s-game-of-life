@@ -47,7 +47,7 @@ public class ButtonPanel extends JPanel {
 			changeButtonText();
 			canvas.changeStatus();
 		});
-		this.add(startButton);
+		add(startButton);
 
 	}
 
