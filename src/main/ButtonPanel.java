@@ -19,23 +19,25 @@ public class ButtonPanel extends JPanel {
 	public ButtonPanel(Canvas c) {
 
 		canvas = c;
-		configureButton();
 		configureSpinner();
+		configureButton();
 	}
 
 	private void configureSpinner() {
-		SpinnerNumberModel mSpinner = new SpinnerNumberModel (Canvas.INITIAL_DELAY,MIN,MAX,MIN);
+		SpinnerNumberModel mSpinner = new SpinnerNumberModel(Canvas.INITIAL_DELAY, MIN, MAX, MIN);
 		delay = new JSpinner(mSpinner);
 		delay.addChangeListener(e -> {
 			Integer value = (Integer) delay.getValue();
-			if (value < MIN) delay.setValue(MIN);
-			if (value > MAX) delay.setValue(MAX);
+			if (value < MIN)
+				delay.setValue(MIN);
+			if (value > MAX)
+				delay.setValue(MAX);
 			value = (Integer) delay.getValue();
 			canvas.setDelay(value);
 		});
 		add(new JLabel("Delay in ms"));
 		add(delay);
-		
+
 	}
 
 	private void configureButton() {
@@ -50,10 +52,12 @@ public class ButtonPanel extends JPanel {
 	}
 
 	private void changeButtonText() {
-		
-		if (startButton.getText().equals(BSTART)) startButton.setText(BSTOP);
-		else startButton.setText(BSTART);
-		
+
+		if (startButton.getText().equals(BSTART))
+			startButton.setText(BSTOP);
+		else
+			startButton.setText(BSTART);
+
 	}
 
 }

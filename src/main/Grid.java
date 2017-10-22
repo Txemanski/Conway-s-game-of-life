@@ -56,4 +56,11 @@ public class Grid {
 	public HashSet<Point> getAliveCells(){
 		return aliveCells;
 	}
+	
+	public void manualChangeStatusCell(Point p) {
+		
+		if (aliveCells.contains(p)) aliveCells.remove(p);
+		else aliveCells.add(p);
+		
+	}
 }

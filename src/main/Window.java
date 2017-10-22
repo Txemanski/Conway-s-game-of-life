@@ -11,7 +11,7 @@ public class Window extends JFrame {
 	private ButtonPanel bPanel = new ButtonPanel(p);
 
 	public Window(String string) {
-		// TODO Auto-generated constructor stub
+		
 		super(string);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(p, BorderLayout.CENTER);
