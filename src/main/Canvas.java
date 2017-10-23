@@ -15,9 +15,9 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 
 	private static final long serialVersionUID = -4810618286807932601L;
 	public static final int RESOLUTION = 1000;
-	private int cellSize = 100;
+	private int cellSize = 30;
 	public static final int INITIAL_DELAY = 1000;
-	private Point dragOrigin = new Point(), scaleOrigin = new Point();
+	private Point dragOrigin = new Point();
 	private int xPitch = 0, yPitch = 0;
 	private Grid gameBoard = new Grid();
 	private Timer timer = new Timer(INITIAL_DELAY, e -> {
@@ -40,11 +40,9 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 
 		HashSet<Point> test = gameBoard.getAliveCells();
 
-		for (Point p : test) {
-			g.fillRect(p.x * cellSize + xPitch, p.y * cellSize + yPitch, cellSize - 1, cellSize - 1);
-			System.out.println((p.x * cellSize + xPitch) + " | " + (p.y * cellSize + yPitch));
-			System.out.println(xPitch + " - " + yPitch);
-		}
+		for (Point p : test) 
+			g.fillRect((p.x + xPitch) * cellSize, (p.y + yPitch) * cellSize , cellSize - 1, cellSize - 1);
+
 	}
 
 	public void changeStatus() {
@@ -62,7 +60,7 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (!timer.isRunning()) {
-			gameBoard.manualChangeStatusCell(new Point((e.getX() - xPitch) / cellSize, (e.getY() - yPitch) / cellSize));
+			gameBoard.manualChangeStatusCell(new Point(e.getX() / cellSize - xPitch, e.getY() / cellSize - yPitch));
 			repaint();
 		}
 
@@ -77,31 +75,30 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 	public void mouseDragged(MouseEvent e) {
 
 		Point currentPoint = e.getPoint();
-
-		xPitch += currentPoint.x - dragOrigin.x;
-		yPitch += currentPoint.y - dragOrigin.y;
-		dragOrigin = currentPoint;
-
-		repaint();
+		
+		int dragDiffX = currentPoint.x - dragOrigin.x;
+		int dragDiffY = currentPoint.y - dragOrigin.y;
+		
+		if (dragDiffX > cellSize || dragDiffX < -1 * cellSize) {
+			xPitch += dragDiffX / cellSize;
+			dragOrigin.x = currentPoint.x;
+			repaint();
+		}
+		
+		if (dragDiffY > cellSize || dragDiffY < -1 * cellSize) {
+			yPitch += dragDiffY / cellSize;
+			dragOrigin.y = currentPoint.y;
+			repaint();
+		}
 
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 
-		int rotation = -1 * e.getWheelRotation();
-		// System.out.println(rotation);
-		if (cellSize > 2 || rotation > -1) {
-			// xPitch -= rotation * Math.sqrt(scaleOrigin.getX() / cellSize);
-			// yPitch -= rotation * Math.sqrt(scaleOrigin.getY() / cellSize);
-			
-
-			xPitch -= rotation * scaleOrigin.getX() / cellSize;
-			yPitch -= rotation * scaleOrigin.getY() / cellSize;
-			cellSize += rotation;
-		
-			repaint();
-		}
+		int rotation = e.getWheelRotation();
+		cellSize -= rotation;
+		repaint();
 	}
 
 	@Override
@@ -122,9 +119,10 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
-		scaleOrigin = e.getPoint();
-
+		// TODO Auto-generated method stub
+		
 	}
 
 }
