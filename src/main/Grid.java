@@ -11,13 +11,12 @@ public class Grid {
 	
 	
 	public Grid () {
-		/*aliveCells.add(new Point(2,1));
+		aliveCells.add(new Point(2,1));
 		aliveCells.add(new Point(3,2));
 		aliveCells.add(new Point(3,3));
 		aliveCells.add(new Point(2,3));
 		aliveCells.add(new Point(1,3));
-		*/
-		aliveCells.add(new Point(0,0));
+		
 		
 	}
 	
@@ -29,7 +28,13 @@ public class Grid {
 		tempCells.forEach(e -> aliveCells.add(e));
 		tempCells.clear();
 		checkedCells.clear();
+		
+		
 	
+	}
+	
+	public HashSet<Point> getGrid(){
+		return aliveCells;
 	}
 	
 	private void aliveNextTurn(int x, int y) {
@@ -56,10 +61,7 @@ public class Grid {
 				}		
 	}
 
-	public HashSet<Point> getAliveCells(){
-		return aliveCells;
-	}
-	
+
 	public void manualChangeStatusCell(Point p) {
 		
 		if (aliveCells.contains(p)) aliveCells.remove(p);

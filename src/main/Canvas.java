@@ -6,27 +6,21 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.HashSet;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 public class Canvas extends JPanel implements MouseInputListener, MouseWheelListener {
 
 	private static final long serialVersionUID = -4810618286807932601L;
 	public static final int RESOLUTION = 1000;
-	private int cellSize = 100;
-	public static final int INITIAL_DELAY = 1000;
+	private int cellSize = 10;
 	private Point dragOrigin = new Point();
 	private float xPitch = 0, yPitch = 0;
 	private Grid gameBoard = new Grid();
-	private Timer timer = new Timer(INITIAL_DELAY, e -> {
-		gameBoard.updateGrid();
-		repaint();
-	});
+	private boolean isGameStopped = true;
 
 	public Canvas() {
-		timer.setRepeats(true);
+		
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.addMouseWheelListener(this);
@@ -37,39 +31,26 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 		super.paintComponent(g);
 		this.setBackground(Color.BLACK);
 		g.setColor(Color.GREEN);
-
-		HashSet<Point> test = gameBoard.getAliveCells();
-
-		for (Point p : test) 
-			g.fillRect(Math.round(p.x + xPitch) * cellSize, Math.round(p.y + yPitch) * cellSize , cellSize - 1, cellSize - 1);
+		
+		gameBoard.getGrid().forEach(p -> g.fillRect(Math.round(p.x + xPitch) * cellSize, Math.round(p.y + yPitch) * cellSize , cellSize - 1, cellSize - 1));
 
 	}
-
-	public void changeStatus() {
-		if (timer.isRunning())
-			timer.stop();
-		else
-			timer.start();
-
-	}
-
-	public void setDelay(int delay) {
-		timer.setDelay(delay);
-	}
+	
+	public void updateGrid() {gameBoard.updateGrid();}
+	
+	public void setGameStopped(boolean b)  {isGameStopped = b;}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (!timer.isRunning()) {
+		if (isGameStopped) {
 			gameBoard.manualChangeStatusCell(new Point((int)(e.getX() / cellSize - xPitch), (int)(e.getY() / cellSize - yPitch)));
 			repaint();
 		}
 
 	}
 
-	public void mousePressed(MouseEvent e) {
-
-		dragOrigin = e.getPoint();
-	}
+	@Override
+	public void mousePressed(MouseEvent e) {dragOrigin = e.getPoint();}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -97,10 +78,7 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 	public void mouseWheelMoved(MouseWheelEvent e) {
 
 		int rotation = e.getWheelRotation();
-		
-		
-		//xPitch -= rotation * 500 / (cellSize * cellSize);
-		//yPitch -= rotation * 500 / (cellSize * cellSize);
+
 		cellSize -= rotation;
 		repaint();
 	}
@@ -125,7 +103,7 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		System.out.println(e.getX() + " | " + e.getY());
+
 		
 	}
 

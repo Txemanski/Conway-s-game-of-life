@@ -11,29 +11,30 @@ public class ButtonPanel extends JPanel {
 	private static final long serialVersionUID = 6980336047696920906L;
 	private static final String BSTART = "Start", BSTOP = "Stop";
 	private static final int MIN = 10, MAX = 10000;
-
-	JButton startButton = new JButton(BSTART);
-	JSpinner delay;
-	Canvas canvas;
-
-	public ButtonPanel(Canvas c) {
-
-		canvas = c;
+	
+	private int delayValue = 500, generation = 0;	
+	private JLabel stepCounter = new JLabel("Turn: " + generation);
+	private boolean run = false;
+	
+	public ButtonPanel() {
+		
 		configureSpinner();
 		configureButton();
+		add(stepCounter);
 	}
 
 	private void configureSpinner() {
-		SpinnerNumberModel mSpinner = new SpinnerNumberModel(Canvas.INITIAL_DELAY, MIN, MAX, MIN);
+		
+		JSpinner delay;
+		SpinnerNumberModel mSpinner = new SpinnerNumberModel(delayValue, MIN, MAX, MIN);
 		delay = new JSpinner(mSpinner);
 		delay.addChangeListener(e -> {
-			Integer value = (Integer) delay.getValue();
-			if (value < MIN)
-				delay.setValue(MIN);
-			if (value > MAX)
-				delay.setValue(MAX);
-			value = (Integer) delay.getValue();
-			canvas.setDelay(value);
+			delayValue = (Integer) delay.getValue();
+			if (delayValue < MIN)
+				delayValue = MIN;
+			if (delayValue > MAX)
+				delayValue = MAX;
+			delay.setValue(delayValue);
 		});
 		add(new JLabel("Delay in ms"));
 		add(delay);
@@ -42,22 +43,29 @@ public class ButtonPanel extends JPanel {
 
 	private void configureButton() {
 
+		JButton startButton = new JButton(BSTART);
 		startButton.setSize(300, 100);
 		startButton.addActionListener(e -> {
-			changeButtonText();
-			canvas.changeStatus();
+			run = !run;
+			if (run)
+				startButton.setText(BSTOP);
+			else
+				startButton.setText(BSTART);
 		});
 		add(startButton);
 
 	}
-
-	private void changeButtonText() {
-
-		if (startButton.getText().equals(BSTART))
-			startButton.setText(BSTOP);
-		else
-			startButton.setText(BSTART);
-
+	
+	public void incrementCounter() {
+		stepCounter.setText("Turn: " + ++generation);
+	}
+	
+	public int getDelay () {
+		return delayValue;
+	}
+	
+	public boolean mustRun() {
+		return run;
 	}
 
 }
