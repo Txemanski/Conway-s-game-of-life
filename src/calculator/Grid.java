@@ -1,4 +1,4 @@
-package main;
+package calculator;
 
 import java.awt.Point;
 import java.util.HashSet;

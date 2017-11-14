@@ -1,4 +1,4 @@
-package main;
+package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,6 +8,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+
+import calculator.Grid;
 
 public class Canvas extends JPanel implements MouseInputListener, MouseWheelListener {
 

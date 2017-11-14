@@ -1,5 +1,7 @@
 package main;
 
+import gui.Window;
+
 public class GOLmain {
 
 	public static void main(String[] args) {
