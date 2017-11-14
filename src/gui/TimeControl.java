@@ -19,7 +19,7 @@ public class TimeControl {
 		timerGame = new Timer(buttons.getDelay(), e -> {
 			visualBoard.updateGrid();
 			visualBoard.repaint();
-			buttons.incrementCounter();
+			buttons.updateCounter();
 		});
 		timerGame.setRepeats(true);
 		

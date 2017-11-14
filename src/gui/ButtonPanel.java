@@ -1,10 +1,16 @@
 package gui;
 
+import java.io.File;
+
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileFilter;
+
+import calculator.Grid;
 
 public class ButtonPanel extends JPanel {
 
@@ -12,14 +18,19 @@ public class ButtonPanel extends JPanel {
 	private static final String BSTART = "Start", BSTOP = "Stop";
 	private static final int MIN = 10, MAX = 10000;
 	
-	private int delayValue = 500, generation = 0;	
-	private JLabel stepCounter = new JLabel("Turn: " + generation);
+	private Grid gameBoard;
+	private int delayValue = 500;	
+	private JLabel stepCounter = new JLabel();
 	private boolean run = false;
 	
-	public ButtonPanel() {
+	public ButtonPanel(Grid g) {
 		
+		gameBoard = g;
 		configureSpinner();
-		configureButton();
+		configureStartButton();
+		configureSaveButton();
+		configureLoadButton();
+		updateCounter();
 		add(stepCounter);
 	}
 
@@ -41,7 +52,7 @@ public class ButtonPanel extends JPanel {
 
 	}
 
-	private void configureButton() {
+	private void configureStartButton() {
 
 		JButton startButton = new JButton(BSTART);
 		startButton.setSize(300, 100);
@@ -56,8 +67,36 @@ public class ButtonPanel extends JPanel {
 
 	}
 	
-	public void incrementCounter() {
-		stepCounter.setText("Turn: " + ++generation);
+	private void configureSaveButton() {
+
+		JButton saveButton = new JButton("Save");
+		saveButton.setSize(300, 100);
+		saveButton.addActionListener(e -> {
+			JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setCurrentDirectory(new File("./"));
+			int result = fileDialog.showSaveDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) gameBoard.saveStatustoFile(fileDialog.getSelectedFile());
+		});
+		add(saveButton);
+
+	}
+	
+	private void configureLoadButton() {
+
+		JButton loadButton = new JButton("Load");
+		loadButton.setSize(300, 100);
+		loadButton.addActionListener(e -> {
+			JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setCurrentDirectory(new File("./"));
+			int result = fileDialog.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) gameBoard.loadStatusfromFile(fileDialog.getSelectedFile());
+		});
+		add(loadButton);
+
+	}
+	
+	public void updateCounter() {
+		stepCounter.setText("Turn: " + gameBoard.getGeneration());
 	}
 	
 	public int getDelay () {

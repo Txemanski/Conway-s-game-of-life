@@ -21,8 +21,9 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 	private Grid gameBoard = new Grid();
 	private boolean isGameStopped = true;
 
-	public Canvas() {
+	public Canvas(Grid g) {
 		
+		gameBoard = g;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.addMouseWheelListener(this);

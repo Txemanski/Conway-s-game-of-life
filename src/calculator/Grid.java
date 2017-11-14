@@ -1,6 +1,7 @@
 package calculator;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.HashSet;
 
 public class Grid {
@@ -8,6 +9,8 @@ public class Grid {
 	HashSet<Point> aliveCells = new HashSet<Point>();
 	HashSet<Point> tempCells = new HashSet<Point>();
 	HashSet<Point> checkedCells = new HashSet<Point>();
+	
+	private int generation = 0;
 	
 	
 	public Grid () {
@@ -28,7 +31,7 @@ public class Grid {
 		tempCells.forEach(e -> aliveCells.add(e));
 		tempCells.clear();
 		checkedCells.clear();
-		
+		generation++;
 		
 	
 	}
@@ -66,6 +69,22 @@ public class Grid {
 		
 		if (aliveCells.contains(p)) aliveCells.remove(p);
 		else aliveCells.add(p);
+		
+	}
+	
+	public int getGeneration() {
+		return generation;
+	}
+	
+	public void saveStatustoFile(File f) {
+		
+		System.out.println("Saving file " + f.getName());
+		
+	}
+	
+	public void loadStatusfromFile(File f) {
+		
+		System.out.println("Loading file " + f.getName());
 		
 	}
 }
