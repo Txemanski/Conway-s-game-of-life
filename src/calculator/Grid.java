@@ -2,89 +2,80 @@ package calculator;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 
+import javax.swing.JOptionPane;
+
+import persistence.StatePersistence;
+
 public class Grid {
-	
-	HashSet<Point> aliveCells = new HashSet<Point>();
+
+	GridState aliveCells = new GridState();
 	HashSet<Point> tempCells = new HashSet<Point>();
 	HashSet<Point> checkedCells = new HashSet<Point>();
-	
-	private int generation = 0;
-	
-	
-	public Grid () {
-		aliveCells.add(new Point(2,1));
-		aliveCells.add(new Point(3,2));
-		aliveCells.add(new Point(3,3));
-		aliveCells.add(new Point(2,3));
-		aliveCells.add(new Point(1,3));
-		
-		
-	}
-	
+	StatePersistence fileManager = new StatePersistence();
+
 	public void updateGrid() {
-		
+
 		aliveCells.forEach(e -> checkNeighbourhood(e.x, e.y));
-		
+
 		aliveCells.clear();
 		tempCells.forEach(e -> aliveCells.add(e));
 		tempCells.clear();
 		checkedCells.clear();
-		generation++;
-		
-	
+		aliveCells.setGeneration(aliveCells.getGeneration() + 1);
 	}
-	
-	public HashSet<Point> getGrid(){
+
+	public HashSet<Point> getGrid() {
 		return aliveCells;
 	}
-	
+
 	private void aliveNextTurn(int x, int y) {
-		
+
 		int numberofAliveNeighbours = 0;
-		
+
 		for (int i = -1; i < 2; i++)
-			for (int j = -1; j < 2; j++) 				
-				if (aliveCells.contains(new Point(x + i, y + j)) && (i != 0 || j != 0))					
+			for (int j = -1; j < 2; j++)
+				if (aliveCells.contains(new Point(x + i, y + j)) && (i != 0 || j != 0))
 					numberofAliveNeighbours++;
-			
-		if (aliveCells.contains(new Point(x, y)) && numberofAliveNeighbours == 2 || numberofAliveNeighbours == 3 )
+
+		if (aliveCells.contains(new Point(x, y)) && numberofAliveNeighbours == 2 || numberofAliveNeighbours == 3)
 			tempCells.add(new Point(x, y));
-		
+
 	}
-	
+
 	private void checkNeighbourhood(int x, int y) {
-		
-		for (int i = -1; i < 2; i++) 
+
+		for (int i = -1; i < 2; i++)
 			for (int j = -1; j < 2; j++)
 				if (!checkedCells.contains(new Point(x + i, y + j))) {
 					checkedCells.add(new Point(x + i, y + j));
 					aliveNextTurn(x + i, y + j);
-				}		
+				}
 	}
-
 
 	public void manualChangeStatusCell(Point p) {
-		
-		if (aliveCells.contains(p)) aliveCells.remove(p);
-		else aliveCells.add(p);
-		
+
+		if (aliveCells.contains(p))
+			aliveCells.remove(p);
+		else
+			aliveCells.add(p);
+
 	}
-	
+
 	public int getGeneration() {
-		return generation;
+		return aliveCells.getGeneration();
 	}
-	
-	public void saveStatustoFile(File f) {
-		
-		System.out.println("Saving file " + f.getName());
-		
+
+	public void saveStatustoFile(File f) throws IOException {
+
+		fileManager.saveState(f, aliveCells);
+
 	}
-	
-	public void loadStatusfromFile(File f) {
-		
-		System.out.println("Loading file " + f.getName());
-		
+
+	public void loadStatusfromFile(File f) throws ClassNotFoundException, IOException {
+		aliveCells = fileManager.loadState(f);
+
 	}
 }

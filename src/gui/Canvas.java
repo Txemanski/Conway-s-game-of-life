@@ -9,8 +9,6 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
-import calculator.Grid;
-
 public class Canvas extends JPanel implements MouseInputListener, MouseWheelListener {
 
 	private static final long serialVersionUID = -4810618286807932601L;
@@ -18,12 +16,11 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 	private int cellSize = 10;
 	private Point dragOrigin = new Point();
 	private float xPitch = 0, yPitch = 0;
-	private Grid gameBoard = new Grid();
-	private boolean isGameStopped = true;
+	private UIManager masterUI;
 
-	public Canvas(Grid g) {
+	public Canvas(UIManager master) {
 		
-		gameBoard = g;
+		masterUI = master;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.addMouseWheelListener(this);
@@ -35,18 +32,14 @@ public class Canvas extends JPanel implements MouseInputListener, MouseWheelList
 		this.setBackground(Color.BLACK);
 		g.setColor(Color.GREEN);
 		
-		gameBoard.getGrid().forEach(p -> g.fillRect(Math.round(p.x + xPitch) * cellSize, Math.round(p.y + yPitch) * cellSize , cellSize - 1, cellSize - 1));
+		masterUI.gameBoard.getGrid().forEach(p -> g.fillRect(Math.round(p.x + xPitch) * cellSize, Math.round(p.y + yPitch) * cellSize , cellSize - 1, cellSize - 1));
 
 	}
-	
-	public void updateGrid() {gameBoard.updateGrid();}
-	
-	public void setGameStopped(boolean b)  {isGameStopped = b;}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (isGameStopped) {
-			gameBoard.manualChangeStatusCell(new Point((int)(e.getX() / cellSize - xPitch), (int)(e.getY() / cellSize - yPitch)));
+		if (!masterUI.timerGame.isRunning()) {
+			masterUI.gameBoard.manualChangeStatusCell(new Point((int)(e.getX() / cellSize - xPitch), (int)(e.getY() / cellSize - yPitch)));
 			repaint();
 		}
 
